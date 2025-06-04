@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hacker Terminal</title>
+  <style>
+    body {
+      margin: 0;
+      height: 100vh;
+      background: #0d0d0d;
+      font-family: 'Courier New', monospace;
+      color: #00ff00;
+      overflow: hidden;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    .terminal {
+      background: rgba(0, 0, 0, 0.9);
+      padding: 20px;
+      border: 2px solid #00ff00;
+      border-radius: 8px;
+      box-shadow: 0 0 20px rgba(0, 255, 0, 0.5);
+      width: 90%;
+      max-width: 600px;
+      text-align: left;
+      position: relative;
+      z-index: 1;
+    }
+    h1 {
+      font-size: 1.5em;
+      margin: 0 0 10px 0;
+      text-transform: uppercase;
+      animation: glitch 1s linear infinite;
+    }
+    p {
+      font-size: 1.1em;
+      margin: 5px 0;
+    }
+    .blink {
+      animation: blink 1s step-end infinite;
+    }
+    .transaction {
+      color: #ff4444;
+      font-weight: bold;
+      margin-top: 15px;
+    }
+    @keyframes glitch {
+      2%, 64% {
+        transform: translate(2px, 0) skew(5deg);
+      }
+      4%, 60% {
+        transform: translate(-2px, 0) skew(-5deg);
+      }
+      62% {
+        transform: translate(0, 0) skew(0deg);
+      }
+    }
+    @keyframes blink {
+      50% {
+        opacity: 0;
+      }
+    }
+    .matrix {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      opacity: 0.2;
+    }
+  </style>
+</head>
+<body>
+  <canvas id="matrix" class="matrix"></canvas>
+  <div class="terminal">
+    <h1 class="blink">[HACKER TERMINAL]</h1>
+    <p>Target: Hassaan Bari</p>
+    <p>Accessing Bank Account... [SUCCESS]</p>
+    <p>Stealing Credentials... [COMPLETE]</p>
+    <p>Initializing Transaction...</p>
+    <p class="transaction">Transaction Amount: $<span id="amount">0.00</span> <span class="blink">█</span></p>
+    <p>Transferring to Offshore Account...</p>
+    <p>Status: <span class="blink">[IN PROGRESS]</span></p>
+  </div>
+
+  <script>
+    const canvas = document.getElementById('matrix');
+    const ctx = canvas.getContext('2d');
+    canvas.height = window.innerHeight;
+    canvas.width = window.innerWidth;
+    const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ@#$%^&*';
+    const fontSize = 14;
+    const columns = canvas.width / fontSize;
+    const drops = [];
+    for (let x = 0; x < columns; x++) drops[x] = 1;
+
+    function draw() {
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+      ctx.fillStyle = '#00ff00';
+      ctx.font = fontSize + 'px monospace';
+      for (let i = 0; i < drops.length; i++) {
+        const text = chars.charAt(Math.floor(Math.random() * chars.length));
+        ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+        if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+        drops[i]++;
+      }
+    }
+    setInterval(draw, 33);
+
+    function getRandomAmount() {
+      return (Math.random() * (100000 - 1000) + 1000).toFixed(2);
+    }
+
+    function updateTransaction() {
+      const amountElement = document.getElementById('amount');
+      amountElement.textContent = getRandomAmount();
+    }
+    setInterval(updateTransaction, 2000);
+  </script>
+</body>
+</html>
